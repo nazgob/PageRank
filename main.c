@@ -8,13 +8,10 @@
 int main(void)
 {
     printf("PRR...\n");
-    printf("sizeof(int) = %d \n", sizeof(int));
-    printf("sizeof(float) = %d \n", sizeof(float));
-    printf("sizeof(double) = %d \n", sizeof(double));
 
-    const int int_size = 4;
-    //const int float_size = 4;
-    //const int double_size = 8;
+    const int int_size = sizeof(int);
+    //const int float_size = sizeof(float);
+    //const int double_size = sizeof(double);
     const int dimension = 4;
 
     srand(time(0));

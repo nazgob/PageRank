@@ -1,8 +1,8 @@
 OBJS = main.o \
-       matrix.h
+       matrix.o
 
 CC = gcc -std=c99
-EXEC =  prr
+EXEC = prr
 W_FLAGS = -Wall -Wextra -pedantic
 
 FLAGS = -I . $(W_FLAGS)
