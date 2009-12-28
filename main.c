@@ -2,25 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include <string.h>
 
 #include <matrix.h>
-
-void matrix_populate(const matrix* m, size_t dimension)
-{
-    int tmp = 0;
-    int* intp = &tmp;
-
-    for (size_t i = 0; i < dimension; ++i)
-    {
-	for(size_t j = 0; j < dimension; ++j)
-	{
-	    (*intp)++; 
-	    void* target = (char*)(m->elements[i]) + 4 * j;
-	    memcpy(target, intp, 4);	
-	}
-    }
-}
 
 int main(void)
 {

@@ -1,14 +1,13 @@
-OBJS = main.o
-CC = gcc 
+OBJS = main.o \
+       matrix.h
+
+CC = gcc -std=c99
 EXEC =  prr
-W_FLAGS = -Wall -Wextra -Werror
+W_FLAGS = -Wall -Wextra -pedantic
 
-LIBS = gtest_main
+FLAGS = -I . $(W_FLAGS)
 
-FLAGS = -l$(LIBS) -I$(GTEST_INC_DIR) $(W_FLAGS)
-
-%.o : %.C
-	@echo "Custom rule..."
+%.o : %.c
 	$(CC) $(FLAGS) -c $<
 
 main: $(OBJS)
