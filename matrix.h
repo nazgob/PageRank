@@ -18,6 +18,8 @@ extern void matrix_init(matrix* m, size_t element_size, size_t dimension);
 
 extern void matrix_free(matrix* m, size_t dimension);
 
+extern void* matrix_get(const matrix* m, size_t i, size_t j);
+
 extern void matrix_display(const matrix* m, size_t dimension);
 
 extern void matrix_populate(const matrix* m, size_t dimension);

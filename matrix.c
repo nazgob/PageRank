@@ -26,13 +26,19 @@ extern void matrix_free(matrix* m, size_t dimension)
     m = NULL;
 }
 
+extern void* matrix_get(const matrix* m, size_t i, size_t j)
+{
+    void* tmp = ((char*)(m->elements[i]) + 4 * j);
+    return tmp;
+}
+
 extern void matrix_display(const matrix* m, size_t dimension)
 {
     for (size_t i = 0; i < dimension; ++i)
     {
 	for(size_t j = 0; j < dimension; ++j)
 	{
-	    printf("%d ", *(int*)((char*)(m->elements[i]) + 4 * j));
+	    printf("%d ", *(int*)matrix_get(m, i, j));
 	}
 	printf("\n");
     }
@@ -48,7 +54,7 @@ extern void matrix_populate(const matrix* m, size_t dimension)
 	for(size_t j = 0; j < dimension; ++j)
 	{
 	    *intp = rand() % 2; 
-	    void* target = (char*)(m->elements[i]) + 4 * j;
+	    void* target = (char*)(matrix_get(m, i, j));
 	    memcpy(target, intp, 4);	
 	}
     }
