@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern char* cast_int(void* ptr);
+
+extern char* cast_float(void* ptr);
+
 typedef struct matrix
 {
     void** elements;
@@ -20,7 +24,7 @@ extern void matrix_free(matrix* m, size_t dimension);
 
 extern void* matrix_get(const matrix* m, size_t i, size_t j);
 
-extern void matrix_display(const matrix* m, size_t dimension);
+extern void matrix_display(const matrix* m, size_t dimension, char*(*pfun)(void* ptr));
 
 extern void matrix_populate(const matrix* m, size_t dimension);
 
