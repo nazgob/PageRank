@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include <matrix.h>
+#include <minunit.h>
 
 size_t number_of_links_coming_from(matrix* m, size_t row, size_t dimension)
 {
