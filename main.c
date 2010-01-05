@@ -57,15 +57,15 @@ void gen_a_matrix(matrix* a, matrix* m, size_t dimension)
 	    memcpy(target, floatp, a->element_size);	
 	}
     }
-    char*(*pfun)(void* ptr) = cast_float;
-    matrix_display(a, dimension, pfun);
+    //char*(*pfun)(void* ptr) = cast_float;
+    //matrix_display(a, dimension, pfun);
 }
 
 int main(void)
 {
     printf("PRR...\n");
 
-    const int dimension = 4;
+    const int dimension = 5;
 
     srand(time(0));
 
@@ -76,9 +76,18 @@ int main(void)
 
     matrix a;
     gen_a_matrix(&a, &m, dimension);
+    matrix_display(&a, dimension, cast_float);
+
+    matrix_transpose(&a, dimension);
+    matrix_display(&a, dimension, cast_float);
+
+    matrix x;
+    matrix_multiply(&x, &a, &m, dimension);
+    matrix_display(&x, dimension, cast_float);
 
     matrix_free(&a, dimension);
     matrix_free(&m, dimension);
+    matrix_free(&x, dimension);
 
     return 0;
 }

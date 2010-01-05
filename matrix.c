@@ -44,7 +44,7 @@ extern void matrix_free(matrix* m, size_t dimension)
 
 extern void* matrix_get(const matrix* m, size_t i, size_t j)
 {
-    void* tmp = ((char*)(m->elements[i]) + m->element_size * j);
+    void* tmp = ((char*)(m->elements[i]) + m->element_size * j); // TODO: static?
     return tmp;
 }
 
@@ -58,6 +58,7 @@ extern void matrix_display(const matrix* m, size_t dimension, char*(*pfun)(void*
 	}
 	printf("\n");
     }
+    printf("\n");
 }
 
 extern void matrix_populate(const matrix* m, size_t dimension)
@@ -75,4 +76,42 @@ extern void matrix_populate(const matrix* m, size_t dimension)
 	}
     }
 }
+
+extern void matrix_transpose(matrix* m, size_t dimension)
+{
+    assert(m != NULL);
+    float tmp = 0.0;
+
+    for (size_t i = 0; i < dimension; ++i)
+    {
+	for (size_t j = i+1; j < dimension; ++j)
+	{
+	    tmp = *(float*)(matrix_get(m, i, j));
+	    *(float*)(matrix_get(m, i, j)) = *(float*)(matrix_get(m, j, i)); 
+	    *(float*)(matrix_get(m, j, i)) = tmp;
+	}
+    }
+}
+
+extern void matrix_multiply(matrix* c, const matrix* a, const matrix* b, size_t dimension)
+{
+    assert(a != NULL);
+    assert(b != NULL);
+
+    matrix_init(c, sizeof(float), dimension);
+
+    for (size_t i = 0; i < dimension; ++i)
+    {
+	for (size_t j = 0; j < dimension; ++j)
+	{
+	    *(float*)(matrix_get(c, i, j)) = 0;
+	    for (size_t k = 0; k < dimension; ++k)
+	    {
+		*(float*)(matrix_get(c, i, j)) += (*(float*)(matrix_get(a, i, k))) * (*(float*)(matrix_get(b, k, j))); 
+		printf("%f-%d-%d ", (*(float*)(matrix_get(b, k, j))), i, k);
+	    }
+	}
+    }
+}
+
 

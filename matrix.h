@@ -28,5 +28,9 @@ extern void matrix_display(const matrix* m, size_t dimension, char*(*pfun)(void*
 
 extern void matrix_populate(const matrix* m, size_t dimension);
 
+extern void matrix_transpose(matrix* m, size_t dimension);
+
+extern void matrix_multiply(matrix* c, const matrix* a, const matrix* b, size_t dimension);
+
 #endif // MATRIX_H
 
