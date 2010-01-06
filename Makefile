@@ -1,5 +1,8 @@
 OBJS = main.o \
-       matrix.o
+       vector.o \
+       matrix.o \
+       algorithm.o \
+       utils.o
 
 CC = gcc -std=c99
 EXEC = prr

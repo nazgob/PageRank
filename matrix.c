@@ -12,7 +12,7 @@ extern char* cast_float(void* ptr)
 {
     assert(ptr != NULL);
     static char tmp[128];
-    sprintf(tmp, "%f", *(float*)ptr);
+    sprintf(tmp, "%.4f", *(float*)ptr);
     return tmp;	
 }
 
@@ -107,8 +107,8 @@ extern void matrix_multiply(matrix* c, const matrix* a, const matrix* b, size_t 
 	    *(float*)(matrix_get(c, i, j)) = 0;
 	    for (size_t k = 0; k < dimension; ++k)
 	    {
-		*(float*)(matrix_get(c, i, j)) += (*(float*)(matrix_get(a, i, k))) * (*(float*)(matrix_get(b, k, j))); 
-		printf("%f-%d-%d ", (*(float*)(matrix_get(b, k, j))), i, k);
+		*(float*)(matrix_get(c, i, j)) += (*(float*)(matrix_get(a, i, k))) * (*(int*)(matrix_get(b, k, j))); 
+		//printf("%f-%d-%d ", (*(float*)(matrix_get(b, k, j))), i, k);
 	    }
 	}
     }
