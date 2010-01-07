@@ -8,12 +8,20 @@ int tests_run = 0;
 
 static char* test_vector_sort()
 {
-    float v[3] = {1.5, -0.5, 0.8};
-    vector_sort(v, 3);
+    vector v;
+    vector_init(&v, 3);
 
-    mu_assert("vector_sort failed", compare_floats(v[0], -0.5));
-    mu_assert("vector_sort failed", compare_floats(v[1], 0.8));
-    mu_assert("vector_sort failed", compare_floats(v[2], 1.5));
+    v.elements[0] = 1.5;
+    v.elements[1] = -0.5;
+    v.elements[2] = 0.8;
+
+    vector_sort(&v);
+
+    mu_assert("vector_sort failed", compare_floats(v.elements[0], -0.5));
+    mu_assert("vector_sort failed", compare_floats(v.elements[1], 0.8));
+    mu_assert("vector_sort failed", compare_floats(v.elements[2], 1.5));
+
+    vector_free(&v);
 
     return 0;
 }
@@ -28,79 +36,110 @@ static char* test_compare_floats()
 
 static char* test_vector_copy()
 {
-    const size_t dimension = 3;
-    float* vec = (void*)malloc(sizeof(float) * dimension);
-    float* tmp_vec = (void*)malloc(sizeof(float) * dimension);
+    size_t size = 3;
+    
+    vector vec;
+    vector_init(&vec, size);
 
+    vector tmp_vec;
+    vector_init(&tmp_vec, size);
 
-    for (size_t i = 0; i < dimension; ++i)
+    for (size_t i = 0; i < size; ++i)
     {
-	vec[i] = 0.0;
-	tmp_vec[i] = 6.66;
+	vec.elements[i] = 0.0;
+	tmp_vec.elements[i] = 6.66;
     }
 
-    for (size_t i = 0; i < dimension; ++i)
+    for (size_t i = 0; i < size; ++i)
     {
-	mu_assert("vector init failed", compare_floats(vec[i], 0.0));
-	mu_assert("vector init failed", compare_floats(tmp_vec[i], 6.66));
+	mu_assert("vector init failed", compare_floats(vec.elements[i], 0.0));
+	mu_assert("vector init failed", compare_floats(tmp_vec.elements[i], 6.66));
     }
 
-    for (size_t i = 0; i < dimension; ++i)
+    for (size_t i = 0; i < size; ++i)
     {
-	vec[i] = tmp_vec[i];
-	tmp_vec[i] = 0.0;
+	vec.elements[i] = tmp_vec.elements[i];
+	tmp_vec.elements[i] = 0.0;
     }
 
-    for (size_t i = 0; i < dimension; ++i)
+    for (size_t i = 0; i < size; ++i)
     {
-	mu_assert("vector copy failed", compare_floats(vec[i], 6.66));
-	mu_assert("vector copy failed", compare_floats(tmp_vec[i], 0.0));
+	mu_assert("vector copy failed", compare_floats(vec.elements[i], 6.66));
+	mu_assert("vector copy failed", compare_floats(tmp_vec.elements[i], 0.0));
     }
 
-    free(vec);
-    free(tmp_vec);
+    vector_free(&vec);
+    vector_free(&tmp_vec);
 
     return 0;
 }
 
 static char* test_vector_normalize()
 {
-    float v[3] = {2.5, -0.5, -0.5};
-    vector_normalize(v, 3);
-    mu_assert("vector_normalize failed", v[0] == 1.0);
-    mu_assert("vector_normalize failed", compare_floats(v[1], -0.2));
-    mu_assert("vector_normalize failed", compare_floats(v[2], -0.2));
+    vector v;
+    vector_init(&v, 3);
+
+    v.elements[0] = 2.5;
+    v.elements[1] = -0.5;
+    v.elements[2] = -0.5;
+
+    vector_normalize(&v);
+    
+    mu_assert("vector_normalize failed", compare_floats(v.elements[0], 1.0));
+    mu_assert("vector_normalize failed", compare_floats(v.elements[1], -0.2));
+    mu_assert("vector_normalize failed", compare_floats(v.elements[2], -0.2));
+
+    vector_free(&v);
 
     return 0;
 }
 
-static char* test_algo()
+static char* test_matrix_solve()
 {
-    matrix sample;
-    matrix_init(&sample, sizeof(float), 3);
+    size_t problem_size = 3;
+    matrix problem;
 
-    matrix_multiply_by_vec(&sample);
-    //matrix_display(&sample, cast_float);
+    matrix_init(&problem, sizeof(float), problem_size);
+    
+    *(float*)(matrix_get(&problem, 0, 0)) = 1.5;
+    *(float*)(matrix_get(&problem, 0, 1)) = 0.0;
+    *(float*)(matrix_get(&problem, 0, 2)) = 1.0;
+    *(float*)(matrix_get(&problem, 1, 0)) = -0.5;
+    *(float*)(matrix_get(&problem, 1, 1)) = 0.5;
+    *(float*)(matrix_get(&problem, 1, 2)) = -0.5;
+    *(float*)(matrix_get(&problem, 2, 0)) = -0.5;
+    *(float*)(matrix_get(&problem, 2, 1)) = 0.0;
+    *(float*)(matrix_get(&problem, 2, 2)) = 0.0;
 
-    matrix_free(&sample);
+    vector v;
+    vector_init(&v, problem_size);
+    matrix_solve(&v, &problem);
+
+    for (size_t i = 0; i < problem_size; ++i)
+    {
+	printf("* %f *, ", v.elements[i]);
+    }
+    printf("\n");
+
+    mu_assert("matrix_solve failed", compare_floats(v.elements[0], 1.0));
+    mu_assert("matrix_solve failed", compare_floats(v.elements[1], -0.44));
+    mu_assert("matrix_solve failed", compare_floats(v.elements[2], -0.44));
+    
+    matrix_free(&problem);
+    vector_free(&v);
+
     return 0;
 }
 
 static char* test_no_abstractions()
 {
+    // test vector
     typedef struct vector
     {
 	float* elements;
 	size_t size;
     } vector;
 
-    typedef struct matrix2
-    {
-	float** elements;
-	size_t size;
-    } matrix2;
-
-    // test vector
     vector v;
     v.size = 3;
     v.elements = (float*)malloc(sizeof(float) * v.size);
@@ -116,6 +155,13 @@ static char* test_no_abstractions()
     free(v.elements);
 
     // test matrix2
+    typedef struct matrix2
+    {
+	float** elements;
+	size_t size;
+    } matrix2;
+
+
     matrix2 m2;
     m2.size = 3;
     m2.elements = (float**)malloc(sizeof(float) * m2.size);
@@ -179,14 +225,17 @@ static char* test_old()
     matrix sample;
     matrix_init(&sample, sizeof(float), 3);
 
-    matrix_multiply_by_vec(&sample);
-    //matrix_display(&sample, cast_float);
+    vector v;
+    vector_init(&v, dimension);
+    matrix_solve(&v, &sample);
 
     matrix_free(&sample);
 
     matrix_free(&a);
     matrix_free(&m);
     matrix_free(&x);
+
+    vector_free(&v);
 
     return 0;
 }

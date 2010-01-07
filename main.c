@@ -13,7 +13,7 @@ static char* all_tests()
 {
     mu_run_test(test_compare_floats);
     mu_run_test(test_vector_normalize);
-    mu_run_test(test_algo);
+    mu_run_test(test_matrix_solve);
     mu_run_test(test_vector_copy);
     mu_run_test(test_vector_sort);
     mu_run_test(test_no_abstractions);

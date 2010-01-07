@@ -56,58 +56,50 @@ extern void gen_a_matrix(matrix* a, matrix* m, size_t dimension)
     //matrix_display(a, dimension, pfun);
 }
 
-extern void matrix_multiply_by_vec(const matrix* m)
+extern void matrix_solve(vector* v, const matrix* m)
 {
     assert(m != NULL);
-    *(float*)(matrix_get(m, 0, 0)) = 1.5;
-    *(float*)(matrix_get(m, 0, 1)) = 0.0;
-    *(float*)(matrix_get(m, 0, 2)) = 1.0;
-    *(float*)(matrix_get(m, 1, 0)) = -0.5;
-    *(float*)(matrix_get(m, 1, 1)) = 0.5;
-    *(float*)(matrix_get(m, 1, 2)) = -0.5;
-    *(float*)(matrix_get(m, 2, 0)) = -0.5;
-    *(float*)(matrix_get(m, 2, 1)) = 0.0;
-    *(float*)(matrix_get(m, 2, 2)) = 0.0;
 
-    float* vec = (void*)malloc(sizeof(float) * m->dimension);
-    float* tmp_vec = (void*)malloc(sizeof(float) * m->dimension);
+    size_t size = m->dimension;
 
-    for (size_t i = 0; i < m->dimension; ++i)
+    vector tmp_vec;
+    vector_init(&tmp_vec, size);
+
+    for (size_t i = 0; i < size; ++i)
     {
-	vec[i] = 1.0;
-	tmp_vec[i] = 0.0;
+	v->elements[i] = 1.0;
+	tmp_vec.elements[i] = 0.0;
     }
 
     for(size_t x = 0; x < 3; ++x)
     {
 	printf("\n");
-	for (size_t i = 0; i < m->dimension; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
-	    for (size_t j = 0; j < m->dimension; ++j)
+	    for (size_t j = 0; j < size; ++j)
 	    {
-		//printf("m(m, i, j) = %f * vec[i] = %f\n",  (*(float*)(matrix_get(m, i, j))), vec[i]);
-		tmp_vec[i] += (*(float*)(matrix_get(m, i, j))) * vec[j]; 
+		tmp_vec.elements[i] += (*(float*)(matrix_get(m, i, j))) * v->elements[j]; 
 	    }
-	    //printf("\n");
 	}
 
-	for(size_t i = 0; i < m->dimension; ++i)
+	for(size_t i = 0; i < size; ++i)
 	{
-	    printf("p = %.4f ", tmp_vec[i]);
+	    printf("p = %.4f ", tmp_vec.elements[i]);
 	}
 	printf("\n");
-	vector_normalize(tmp_vec, m->dimension);
-	for(size_t i = 0; i < m->dimension; ++i)
+	vector_normalize(&tmp_vec);
+	for(size_t i = 0; i < size; ++i)
 	{
-	    printf("n = %.4f ", tmp_vec[i]);
+	    printf("n = %.4f ", tmp_vec.elements[i]);
 	}
 	printf("\n");
 
-	for (size_t i = 0; i < m->dimension; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
-	    vec[i] = tmp_vec[i];
-	    tmp_vec[i] = 0.0;
+	    v->elements[i] = tmp_vec.elements[i];
+	    tmp_vec.elements[i] = 0.0;
 	}
     }
+    vector_free(&tmp_vec);
 }
 

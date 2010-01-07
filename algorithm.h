@@ -13,7 +13,7 @@ extern void matrix_gen(matrix* m, size_t dimension);
 
 extern void gen_a_matrix(matrix* a, matrix* m, size_t dimension);
 
-extern void matrix_multiply_by_vec(const matrix* m);
+extern void matrix_solve(vector* v, const matrix* m);
 
 #endif // ALGORITHM_H
 
