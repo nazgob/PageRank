@@ -57,25 +57,3 @@ extern void matrix_transpose(const matrix* m)
     }
 }
 
-/*extern void matrix_multiply(matrix* c, const matrix* a, const matrix* b)
-  {
-  assert(a != NULL);
-  assert(b != NULL);
-
-  matrix_init(c, sizeof(float), a->size);
-
-  for (size_t i = 0; i < a->size; ++i)
-  {
-  for (size_t j = 0; j < a->size; ++j)
-  {
- *(float*)(matrix_get(c, i, j)) = 0;
- for (size_t k = 0; k < a->size; ++k)
- {
- *(float*)(matrix_get(c, i, j)) += (*(float*)(matrix_get(a, i, k))) * (*(int*)(matrix_get(b, k, j))); 
-//printf("%f-%d-%d ", (*(float*)(matrix_get(b, k, j))), i, k);
-}
-}
-}
-}*/
-
-

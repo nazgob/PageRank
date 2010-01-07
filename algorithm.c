@@ -31,11 +31,11 @@ extern float calculateTransitionProbability(matrix* m, size_t i, size_t j)
 extern void matrix_gen(matrix* m, size_t size)
 {
     matrix_init(m, size);
-    generate_web_matrix(m);
+    gen_web_matrix(m);
     matrix_display(m);
 }
 
-extern void generate_web_matrix(const matrix* m)
+extern void gen_web_matrix(const matrix* m)
 {
     for (size_t i = 0; i < m->size; ++i)
     {
@@ -63,7 +63,9 @@ extern void gen_google_matrix(matrix* a, matrix* m)
 
 extern void matrix_solve(vector* v, const matrix* m)
 {
+    assert(v != NULL);
     assert(m != NULL);
+    assert(v->size == m->size);
 
     size_t size = m->size;
 

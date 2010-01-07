@@ -21,7 +21,5 @@ extern void matrix_display(const matrix* m);
 
 extern void matrix_transpose(const matrix* m);
 
-//extern void matrix_multiply(matrix* c, const matrix* a, const matrix* b);
-
 #endif // MATRIX_H
 
