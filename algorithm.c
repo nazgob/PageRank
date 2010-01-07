@@ -7,7 +7,7 @@ extern size_t number_of_links_coming_from(matrix* m, size_t row)
     size_t counter = 0;
     for (size_t i = 0; i < m->dimension; ++i)
     {
-	counter += *(int*)(matrix_get(m, row, i));
+	counter += matrix_get(m, row, i);
     }
     assert(counter <= m->dimension);
 
@@ -21,7 +21,7 @@ extern float calculateTransitionProbability(matrix* m, size_t i, size_t j)
     size_t r = number_of_links_coming_from(m, i);
     (r == 0) ? r = 1 : r; // when page has no links...
 
-    int tmp = *(int*)(matrix_get(m, i, j));
+    int tmp = matrix_get(m, i, j);
 
     float a = ((p * tmp / r) + (1 - p)) / pow(m->dimension, 2);
 
@@ -30,30 +30,22 @@ extern float calculateTransitionProbability(matrix* m, size_t i, size_t j)
 
 extern void matrix_gen(matrix* m, size_t dimension)
 {
-    matrix_init(m, sizeof(int), dimension);
+    matrix_init(m, sizeof(float), dimension);
     matrix_populate(m);
-    char*(*pfun)(void* ptr) = cast_int;
-    matrix_display(m, pfun);
+    matrix_display(m);
 }
 
 extern void gen_a_matrix(matrix* a, matrix* m, size_t dimension)
 {
     matrix_init(a, sizeof(float), dimension);
 
-    float tmp = 0.0;
-    float* floatp= &tmp;
-
     for (size_t i = 0; i < dimension; ++i)
     {
 	for(size_t j = 0; j < dimension; ++j)
 	{
-	    *floatp = calculateTransitionProbability(m, i, j);
-	    void* target = (char*)(matrix_get(a, i, j));
-	    memcpy(target, floatp, a->element_size);	
+	    a->elements[i][j] = calculateTransitionProbability(m, i, j);
 	}
     }
-    //char*(*pfun)(void* ptr) = cast_float;
-    //matrix_display(a, dimension, pfun);
 }
 
 extern void matrix_solve(vector* v, const matrix* m)
@@ -78,7 +70,7 @@ extern void matrix_solve(vector* v, const matrix* m)
 	{
 	    for (size_t j = 0; j < size; ++j)
 	    {
-		tmp_vec.elements[i] += (*(float*)(matrix_get(m, i, j))) * v->elements[j]; 
+		tmp_vec.elements[i] += matrix_get(m, i, j) * v->elements[j]; 
 	    }
 	}
 

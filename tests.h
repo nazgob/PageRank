@@ -100,8 +100,18 @@ static char* test_matrix_solve()
     matrix problem;
 
     matrix_init(&problem, sizeof(float), problem_size);
-    
-    *(float*)(matrix_get(&problem, 0, 0)) = 1.5;
+   
+    problem.elements[0][0] = 1.5;
+    problem.elements[0][1] = 0.0;
+    problem.elements[0][2] = 1.0;
+    problem.elements[1][0] = -0.5;
+    problem.elements[1][1] = 0.5;
+    problem.elements[1][2] = -0.5;
+    problem.elements[2][0] = -0.5;
+    problem.elements[2][1] = 0.0;
+    problem.elements[2][2] = 0.0;
+
+    /**(float*)(matrix_get(&problem, 0, 0)) = 1.5;
     *(float*)(matrix_get(&problem, 0, 1)) = 0.0;
     *(float*)(matrix_get(&problem, 0, 2)) = 1.0;
     *(float*)(matrix_get(&problem, 1, 0)) = -0.5;
@@ -109,7 +119,7 @@ static char* test_matrix_solve()
     *(float*)(matrix_get(&problem, 1, 2)) = -0.5;
     *(float*)(matrix_get(&problem, 2, 0)) = -0.5;
     *(float*)(matrix_get(&problem, 2, 1)) = 0.0;
-    *(float*)(matrix_get(&problem, 2, 2)) = 0.0;
+    *(float*)(matrix_get(&problem, 2, 2)) = 0.0;*/
 
     vector v;
     vector_init(&v, problem_size);
@@ -212,14 +222,14 @@ static char* test_old()
 
     matrix a;
     gen_a_matrix(&a, &m, dimension);
-    matrix_display(&a, cast_float);
+    matrix_display(&a);
 
     matrix_transpose(&a);
-    matrix_display(&a, cast_float);
+    matrix_display(&a);
 
-    matrix x;
-    matrix_multiply(&x, &a, &m);
-    matrix_display(&x, cast_float);
+    //matrix x;
+    //matrix_multiply(&x, &a, &m);
+    //matrix_display(&x);
 
 
     matrix sample;
@@ -233,7 +243,7 @@ static char* test_old()
 
     matrix_free(&a);
     matrix_free(&m);
-    matrix_free(&x);
+    //matrix_free(&x);
 
     vector_free(&v);
 
