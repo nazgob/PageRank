@@ -133,7 +133,13 @@ static char* test_matrix_solve()
 
 static char* test_full_algorithm()
 {
+    size_t web_size = 10;
+
     matrix m;
+    matrix_init(&m, web_size);
+    generate_web_matrix(&m); // random generated links matrix
+
+    matrix_free(&m);
 
     return 0;
 }
@@ -218,7 +224,8 @@ static char* test_old()
     printf("\n");
 
     matrix a;
-    gen_a_matrix(&a, &m, dimension);
+    matrix_init(&a, dimension);
+    gen_google_matrix(&a, &m);
     matrix_display(&a);
 
     matrix_transpose(&a);
@@ -229,7 +236,7 @@ static char* test_old()
     //matrix_display(&x);
 
     matrix sample;
-    matrix_init(&sample, 3);
+    matrix_init(&sample, dimension);
 
     vector v;
     vector_init(&v, dimension);

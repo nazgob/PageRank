@@ -19,8 +19,6 @@ extern void matrix_free(matrix* m);
 
 extern void matrix_display(const matrix* m);
 
-extern void matrix_populate(const matrix* m);
-
 extern void matrix_transpose(const matrix* m);
 
 //extern void matrix_multiply(matrix* c, const matrix* a, const matrix* b);

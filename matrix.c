@@ -41,17 +41,6 @@ extern void matrix_display(const matrix* m)
     printf("\n");
 }
 
-extern void matrix_populate(const matrix* m)
-{
-    for (size_t i = 0; i < m->size; ++i)
-    {
-	for(size_t j = 0; j < m->size; ++j)
-	{
-	    m->elements[i][j] = rand() % 2;
-	}
-    }
-}
-
 extern void matrix_transpose(const matrix* m)
 {
     assert(m != NULL);
