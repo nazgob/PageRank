@@ -1,29 +1,29 @@
 #include <algorithm.h>
 
-extern size_t number_of_links_coming_from(matrix* m, size_t row, size_t dimension)
+extern size_t number_of_links_coming_from(matrix* m, size_t row)
 {
     assert(m != NULL);
 
     size_t counter = 0;
-    for (size_t i = 0; i < dimension; ++i)
+    for (size_t i = 0; i < m->dimension; ++i)
     {
 	counter += *(int*)(matrix_get(m, row, i));
     }
-    assert(counter <= dimension);
+    assert(counter <= m->dimension);
 
     return counter;
 }
 
-extern float calculateTransitionProbability(matrix* m, size_t i, size_t j, size_t dimension)
+extern float calculateTransitionProbability(matrix* m, size_t i, size_t j)
 {
     assert(m != NULL);
     float p = 0.85;
-    size_t r = number_of_links_coming_from(m, i, dimension);
+    size_t r = number_of_links_coming_from(m, i);
     (r == 0) ? r = 1 : r; // when page has no links...
 
     int tmp = *(int*)(matrix_get(m, i, j));
 
-    float a = ((p * tmp / r) + (1 - p)) / pow(dimension, 2);
+    float a = ((p * tmp / r) + (1 - p)) / pow(m->dimension, 2);
 
     return a;
 }
@@ -47,7 +47,7 @@ extern void gen_a_matrix(matrix* a, matrix* m, size_t dimension)
     {
 	for(size_t j = 0; j < dimension; ++j)
 	{
-	    *floatp = calculateTransitionProbability(m, i, j, dimension);
+	    *floatp = calculateTransitionProbability(m, i, j);
 	    void* target = (char*)(matrix_get(a, i, j));
 	    memcpy(target, floatp, a->element_size);	
 	}
@@ -56,7 +56,7 @@ extern void gen_a_matrix(matrix* a, matrix* m, size_t dimension)
     //matrix_display(a, dimension, pfun);
 }
 
-extern void matrix_multiply_by_vec(const matrix* m, size_t dimension)
+extern void matrix_multiply_by_vec(const matrix* m)
 {
     assert(m != NULL);
     *(float*)(matrix_get(m, 0, 0)) = 1.5;
@@ -69,10 +69,10 @@ extern void matrix_multiply_by_vec(const matrix* m, size_t dimension)
     *(float*)(matrix_get(m, 2, 1)) = 0.0;
     *(float*)(matrix_get(m, 2, 2)) = 0.0;
 
-    float* vec = (void*)malloc(sizeof(float) * dimension);
-    float* tmp_vec = (void*)malloc(sizeof(float) * dimension);
+    float* vec = (void*)malloc(sizeof(float) * m->dimension);
+    float* tmp_vec = (void*)malloc(sizeof(float) * m->dimension);
 
-    for (size_t i = 0; i < dimension; ++i)
+    for (size_t i = 0; i < m->dimension; ++i)
     {
 	vec[i] = 1.0;
 	tmp_vec[i] = 0.0;
@@ -81,9 +81,9 @@ extern void matrix_multiply_by_vec(const matrix* m, size_t dimension)
     for(size_t x = 0; x < 3; ++x)
     {
 	printf("\n");
-	for (size_t i = 0; i < dimension; ++i)
+	for (size_t i = 0; i < m->dimension; ++i)
 	{
-	    for (size_t j = 0; j < dimension; ++j)
+	    for (size_t j = 0; j < m->dimension; ++j)
 	    {
 		//printf("m(m, i, j) = %f * vec[i] = %f\n",  (*(float*)(matrix_get(m, i, j))), vec[i]);
 		tmp_vec[i] += (*(float*)(matrix_get(m, i, j))) * vec[j]; 
@@ -91,19 +91,19 @@ extern void matrix_multiply_by_vec(const matrix* m, size_t dimension)
 	    //printf("\n");
 	}
 
-	for(size_t i = 0; i < dimension; ++i)
+	for(size_t i = 0; i < m->dimension; ++i)
 	{
 	    printf("p = %.4f ", tmp_vec[i]);
 	}
 	printf("\n");
-	vector_normalize(tmp_vec, dimension);
-	for(size_t i = 0; i < dimension; ++i)
+	vector_normalize(tmp_vec, m->dimension);
+	for(size_t i = 0; i < m->dimension; ++i)
 	{
 	    printf("n = %.4f ", tmp_vec[i]);
 	}
 	printf("\n");
 
-	for (size_t i = 0; i < dimension; ++i)
+	for (size_t i = 0; i < m->dimension; ++i)
 	{
 	    vec[i] = tmp_vec[i];
 	    tmp_vec[i] = 0.0;

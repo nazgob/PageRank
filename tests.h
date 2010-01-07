@@ -79,7 +79,7 @@ static char* test_algo()
     matrix sample;
     matrix_init(&sample, sizeof(float), 3);
 
-    matrix_multiply_by_vec(&sample, 3);
+    matrix_multiply_by_vec(&sample);
     //matrix_display(&sample, cast_float);
 
     matrix_free(&sample);
@@ -179,7 +179,7 @@ static char* test_old()
     matrix sample;
     matrix_init(&sample, sizeof(float), 3);
 
-    matrix_multiply_by_vec(&sample, 3);
+    matrix_multiply_by_vec(&sample);
     //matrix_display(&sample, cast_float);
 
     matrix_free(&sample);
