@@ -16,7 +16,8 @@ static char* all_tests()
     mu_run_test(test_algo);
     mu_run_test(test_vector_copy);
     mu_run_test(test_vector_sort);
-    //mu_run_test(test_old);
+    mu_run_test(test_no_abstractions);
+    mu_run_test(test_old);
     return 0;
 }
 

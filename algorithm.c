@@ -31,9 +31,9 @@ extern float calculateTransitionProbability(matrix* m, size_t i, size_t j, size_
 extern void matrix_gen(matrix* m, size_t dimension)
 {
     matrix_init(m, sizeof(int), dimension);
-    matrix_populate(m, dimension);
+    matrix_populate(m);
     char*(*pfun)(void* ptr) = cast_int;
-    matrix_display(m, dimension, pfun);
+    matrix_display(m, pfun);
 }
 
 extern void gen_a_matrix(matrix* a, matrix* m, size_t dimension)
