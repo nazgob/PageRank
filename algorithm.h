@@ -9,8 +9,6 @@ extern size_t number_of_links_coming_from(matrix* m, size_t row);
 
 extern float calculateTransitionProbability(matrix* m, size_t i, size_t j);
 
-extern void matrix_gen(matrix* m, size_t size);
-
 extern void gen_web_matrix(const matrix* m);
 
 extern void gen_google_matrix(matrix* a, matrix* m);

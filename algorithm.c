@@ -28,13 +28,6 @@ extern float calculateTransitionProbability(matrix* m, size_t i, size_t j)
     return a;
 }
 
-extern void matrix_gen(matrix* m, size_t size)
-{
-    matrix_init(m, size);
-    gen_web_matrix(m);
-    matrix_display(m);
-}
-
 extern void gen_web_matrix(const matrix* m)
 {
     for (size_t i = 0; i < m->size; ++i)

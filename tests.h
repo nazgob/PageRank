@@ -112,12 +112,12 @@ static char* test_matrix_transpose()
     mu_assert("matrix_tranpose failed", compare_floats(problem.elements[0][1], 3.0));
     mu_assert("matrix_tranpose failed", compare_floats(problem.elements[1][0], 2.0));
     mu_assert("matrix_tranpose failed", compare_floats(problem.elements[1][1], 4.0));
-    
+
     matrix_free(&problem);
 
     return 0;
 }
-    
+
 static char* test_matrix_solve()
 {
     size_t problem_size = 3;
