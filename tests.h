@@ -37,7 +37,7 @@ static char* test_compare_floats()
 static char* test_vector_copy()
 {
     size_t size = 3;
-    
+
     vector vec;
     vector_init(&vec, size);
 
@@ -84,7 +84,7 @@ static char* test_vector_normalize()
     v.elements[2] = -0.5;
 
     vector_normalize(&v);
-    
+
     mu_assert("vector_normalize failed", compare_floats(v.elements[0], 1.0));
     mu_assert("vector_normalize failed", compare_floats(v.elements[1], -0.2));
     mu_assert("vector_normalize failed", compare_floats(v.elements[2], -0.2));
@@ -99,8 +99,8 @@ static char* test_matrix_solve()
     size_t problem_size = 3;
     matrix problem;
 
-    matrix_init(&problem, sizeof(float), problem_size);
-   
+    matrix_init(&problem, problem_size);
+
     problem.elements[0][0] = 1.5;
     problem.elements[0][1] = 0.0;
     problem.elements[0][2] = 1.0;
@@ -110,16 +110,6 @@ static char* test_matrix_solve()
     problem.elements[2][0] = -0.5;
     problem.elements[2][1] = 0.0;
     problem.elements[2][2] = 0.0;
-
-    /**(float*)(matrix_get(&problem, 0, 0)) = 1.5;
-    *(float*)(matrix_get(&problem, 0, 1)) = 0.0;
-    *(float*)(matrix_get(&problem, 0, 2)) = 1.0;
-    *(float*)(matrix_get(&problem, 1, 0)) = -0.5;
-    *(float*)(matrix_get(&problem, 1, 1)) = 0.5;
-    *(float*)(matrix_get(&problem, 1, 2)) = -0.5;
-    *(float*)(matrix_get(&problem, 2, 0)) = -0.5;
-    *(float*)(matrix_get(&problem, 2, 1)) = 0.0;
-    *(float*)(matrix_get(&problem, 2, 2)) = 0.0;*/
 
     vector v;
     vector_init(&v, problem_size);
@@ -134,9 +124,16 @@ static char* test_matrix_solve()
     mu_assert("matrix_solve failed", compare_floats(v.elements[0], 1.0));
     mu_assert("matrix_solve failed", compare_floats(v.elements[1], -0.44));
     mu_assert("matrix_solve failed", compare_floats(v.elements[2], -0.44));
-    
+
     matrix_free(&problem);
     vector_free(&v);
+
+    return 0;
+}
+
+static char* test_full_algorithm()
+{
+    matrix m;
 
     return 0;
 }
@@ -231,9 +228,8 @@ static char* test_old()
     //matrix_multiply(&x, &a, &m);
     //matrix_display(&x);
 
-
     matrix sample;
-    matrix_init(&sample, sizeof(float), 3);
+    matrix_init(&sample, 3);
 
     vector v;
     vector_init(&v, dimension);

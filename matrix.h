@@ -10,15 +10,12 @@
 typedef struct matrix
 {
     float** elements;
-    size_t element_size;
-    size_t dimension;
+    size_t size;
 } matrix;
 
-extern void matrix_init(matrix* m, size_t element_size, size_t dimension);
+extern void matrix_init(matrix* m, size_t size);
 
 extern void matrix_free(matrix* m);
-
-extern float matrix_get(const matrix* m, size_t i, size_t j);
 
 extern void matrix_display(const matrix* m);
 
