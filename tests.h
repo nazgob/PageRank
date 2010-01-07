@@ -94,6 +94,30 @@ static char* test_vector_normalize()
     return 0;
 }
 
+static char* test_matrix_transpose()
+{
+    size_t problem_size = 2;
+    matrix problem;
+
+    matrix_init(&problem, problem_size);
+
+    problem.elements[0][0] = 1.0;
+    problem.elements[0][1] = 2.0;
+    problem.elements[1][0] = 3.0;
+    problem.elements[1][1] = 4.0;
+
+    matrix_transpose(&problem);
+
+    mu_assert("matrix_tranpose failed", compare_floats(problem.elements[0][0], 1.0));
+    mu_assert("matrix_tranpose failed", compare_floats(problem.elements[0][1], 3.0));
+    mu_assert("matrix_tranpose failed", compare_floats(problem.elements[1][0], 2.0));
+    mu_assert("matrix_tranpose failed", compare_floats(problem.elements[1][1], 4.0));
+    
+    matrix_free(&problem);
+
+    return 0;
+}
+    
 static char* test_matrix_solve()
 {
     size_t problem_size = 3;
