@@ -21,6 +21,7 @@ static char* all_tests()
     mu_run_test(test_matrix_solve);
 
     mu_run_test(test_calculate_links);
+    mu_run_test(test_calculate_probability);
     mu_run_test(test_full_algorithm);
     
     return 0;

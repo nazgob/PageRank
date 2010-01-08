@@ -28,9 +28,9 @@ static char* test_vector_sort()
 
 static char* test_compare_floats()
 {
-    //mu_assert("compare_floats failed", compare_floats(0.0, 0.0));
-    //mu_assert("compare_floats failed", compare_floats(0.001, 0.001));
-    //mu_assert("compare_floats failed", !compare_floats(0.0, 0.0150));
+    mu_assert("compare_floats failed", compare_floats(0.0, 0.0));
+    mu_assert("compare_floats failed", compare_floats(0.001, 0.001));
+    mu_assert("compare_floats failed", !compare_floats(0.0, 0.150));
     return 0;
 }
 
@@ -166,9 +166,43 @@ static char* test_calculate_links()
     problem.elements[2][1] = 0;
     problem.elements[2][2] = 1.0;
 
-    mu_assert("calulate link failed", calculate_links(&problem, 0) == 0);
-    mu_assert("calulate link failed", calculate_links(&problem, 1) == 1);
-    mu_assert("calulate link failed", calculate_links(&problem, 2) == 2);
+    mu_assert("calculate_link failed", calculate_links(&problem, 0) == 0);
+    mu_assert("caclulate_link failed", calculate_links(&problem, 1) == 1);
+    mu_assert("calculate_link failed", calculate_links(&problem, 2) == 2);
+
+    matrix_free(&problem);
+
+    return 0;
+}
+
+static char* test_calculate_probability()
+{
+    size_t problem_size = 3;
+    matrix problem;
+
+    matrix_init(&problem, problem_size);
+
+    problem.elements[0][0] = 0;
+    problem.elements[0][1] = 0;
+    problem.elements[0][2] = 0;
+    problem.elements[1][0] = 1.0;
+    problem.elements[1][1] = 0;
+    problem.elements[1][2] = 0;
+    problem.elements[2][0] = 1.0;
+    problem.elements[2][1] = 0;
+    problem.elements[2][2] = 1.0;
+
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 0), 0.05));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 1), 0.05));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 2), 0.05));
+
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 0), 0.90));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 1), 0.05));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 2), 0.05));
+
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 0), 0.475));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 1), 0.05));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 2), 0.475));
 
     matrix_free(&problem);
 

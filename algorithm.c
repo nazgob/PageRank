@@ -21,7 +21,7 @@ extern float calculate_probability(const matrix* m, size_t i, size_t j)
     size_t r = calculate_links(m, i);
     (r == 0) ? r = 1 : r; // when page has no links...
 
-    float a = (p * m->elements[i][j] / r) + ((1 - p) / m->size); //pow(m->size, 2); //TODO:: verify this
+    float a = (p * m->elements[i][j] / r) + ((1 - p) / m->size);
 
     return a;
 }
