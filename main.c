@@ -19,7 +19,8 @@ static char* all_tests()
 
     mu_run_test(test_matrix_transpose);
     mu_run_test(test_matrix_solve);
-    
+
+    mu_run_test(test_calculate_links);
     mu_run_test(test_full_algorithm);
     
     return 0;
@@ -27,6 +28,7 @@ static char* all_tests()
 
 int main(void)
 {
+    srand(time(0));
     char *result = all_tests();
     if (result != 0)
     {

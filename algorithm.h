@@ -5,9 +5,9 @@
 #include <vector.h>
 #include <math.h>
 
-extern size_t number_of_links_coming_from(matrix* m, size_t row);
+extern size_t calculate_links(const matrix* m, size_t row);
 
-extern float calculateTransitionProbability(matrix* m, size_t i, size_t j);
+extern float calculate_probability(const matrix* m, size_t i, size_t j);
 
 extern void gen_web_matrix(const matrix* m);
 

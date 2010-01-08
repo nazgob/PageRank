@@ -1,6 +1,6 @@
 #include <algorithm.h>
 
-extern size_t number_of_links_coming_from(matrix* m, size_t row)
+extern size_t calculate_links(const matrix* m, size_t row)
 {
     assert(m != NULL);
 
@@ -14,22 +14,21 @@ extern size_t number_of_links_coming_from(matrix* m, size_t row)
     return counter;
 }
 
-extern float calculateTransitionProbability(matrix* m, size_t i, size_t j)
+extern float calculate_probability(const matrix* m, size_t i, size_t j)
 {
     assert(m != NULL);
     float p = 0.85;
-    size_t r = number_of_links_coming_from(m, i);
+    size_t r = calculate_links(m, i);
     (r == 0) ? r = 1 : r; // when page has no links...
 
-    float tmp = m->elements[i][j];
-
-    float a = ((p * tmp / r) + (1 - p)) / pow(m->size, 2);
+    float a = (p * m->elements[i][j] / r) + ((1 - p) / m->size); //pow(m->size, 2); //TODO:: verify this
 
     return a;
 }
 
 extern void gen_web_matrix(const matrix* m)
 {
+    assert (m != NULL);
     for (size_t i = 0; i < m->size; ++i)
     {
 	for(size_t j = 0; j < m->size; ++j)
@@ -49,7 +48,7 @@ extern void gen_google_matrix(matrix* a, matrix* m)
     {
 	for(size_t j = 0; j < a->size; ++j)
 	{
-	    a->elements[i][j] = calculateTransitionProbability(m, i, j);
+	    a->elements[i][j] = calculate_probability(m, i, j);
 	}
     }
 }
@@ -71,9 +70,8 @@ extern void matrix_solve(vector* v, const matrix* m)
 	tmp_vec.elements[i] = 0.0;
     }
 
-    for(size_t x = 0; x < 3; ++x)
+    for(size_t x = 0; x < 50; ++x)
     {
-	printf("\n");
 	for (size_t i = 0; i < size; ++i)
 	{
 	    for (size_t j = 0; j < size; ++j)
@@ -82,21 +80,21 @@ extern void matrix_solve(vector* v, const matrix* m)
 	    }
 	}
 
-	for(size_t i = 0; i < size; ++i)
+	/*for(size_t i = 0; i < size; ++i)
 	{
 	    printf("p = %.4f ", tmp_vec.elements[i]);
 	}
 
-	printf("\n");
+	printf("\n");*/
 
 	vector_normalize(&tmp_vec);
 
-	for(size_t i = 0; i < size; ++i)
+	/*for(size_t i = 0; i < size; ++i)
 	{
 	    printf("n = %.4f ", tmp_vec.elements[i]);
 	}
 	printf("\n");
-
+*/
 	for (size_t i = 0; i < size; ++i)
 	{
 	    v->elements[i] = tmp_vec.elements[i];

@@ -2,6 +2,7 @@
 
 extern void vector_init(vector* v, size_t size)
 {
+    assert(size > 0);
     v->size = size;
     v->elements = (float*)malloc(sizeof(float) * v->size);
 }
