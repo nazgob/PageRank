@@ -1,6 +1,7 @@
 *.swp
 *.swo
 *.o
+*.txt
 tags
 prr
 

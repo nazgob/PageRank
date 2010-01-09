@@ -37,13 +37,33 @@ extern void vector_sort(vector* v)
     qsort(v->elements, v->size, sizeof(float), float_comparator);
 }
 
-
-extern void vector_display(vector *v) 
+extern void vector_display(vector* v) 
 {
     assert (v != NULL);
     for (size_t i = 0; i < v->size; ++i)
     {
 	    printf("|%.4f| \n", v->elements[i]);
     }
+}
+
+extern void vector_save(const vector* v)
+{
+    assert (v != NULL);
+
+    FILE *fp = NULL;
+    fp = fopen("page_rank.txt", "wb");
+
+    if(fp == NULL)
+    {
+	printf("IO error.\n");
+	return;
+    }
+
+    for (size_t i = 0; i < v->size; ++i)
+    {
+	fprintf(fp, "|%.8f| \n", v->elements[i]);
+    }
+    printf("Wyniki zapisano w pliku page_rank.txt\n");
+    fclose(fp);
 }
 

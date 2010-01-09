@@ -28,10 +28,11 @@ static char* all_tests()
     return 0;
 }
 
-int main(void)
+int main(int argc, char** argv)
 {
+    /*
     srand(time(0));
-    char *result = all_tests();
+    *char *result = all_tests();
     if (result != 0)
     {
 	printf("%s\n", result);
@@ -40,7 +41,21 @@ int main(void)
     {
 	printf("ALL TESTS PASSED\n");
     }
-    printf("Tests run: %d\n", tests_run);
+    printf("Tests run: %d\n", tests_run);*/
+
+    if(argc != 2)
+    {
+	printf("Podaj jako jedyny argument rozmiar grafu.\n");
+	return 1;
+    }
+
+    size_t web_size = atof(argv[1]);
+
+    srand(time(0));
+
+    printf("Trwa obliczanie...\n");
+
+    page_rank(web_size);
 
     return 0;
 }

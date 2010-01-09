@@ -89,3 +89,37 @@ extern void matrix_solve(vector* v, const matrix* m)
     vector_free(&tmp_vec);
 }
 
+extern void page_rank(size_t size)
+{
+    matrix w;
+    matrix_init(&w, size);
+    gen_web_matrix(&w);
+
+    matrix g;
+    matrix_init(&g, size);
+    gen_google_matrix(&g, &w);
+
+    vector p;
+    vector_init(&p, size);
+
+    matrix_transpose(&g);
+
+    matrix_solve(&p, &g);
+
+    vector_sort(&p);
+
+    vector_save(&p);
+
+    float sum = 0.0;
+    for (size_t i = 0; i < size; ++i)
+    {
+	//printf("PageRank = %f\n", p.elements[i]);
+	sum += p.elements[i];
+    }
+    //printf("sum = %f\n", sum);
+
+    matrix_free(&w);
+    matrix_free(&g);
+    vector_free(&p);
+}
+

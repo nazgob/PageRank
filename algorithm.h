@@ -15,5 +15,7 @@ extern void gen_google_matrix(matrix* a, matrix* m);
 
 extern void matrix_solve(vector* v, const matrix* m);
 
+extern void page_rank(size_t size);
+
 #endif // ALGORITHM_H
 

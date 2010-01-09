@@ -20,7 +20,9 @@ extern void vector_normalize(vector* v);
 
 extern void vector_sort(vector* v);
 
-extern void vector_display(vector *v);
+extern void vector_display(vector* v);
+
+extern void vector_save(const vector* v);
 
 #endif // VECTOR_H
 

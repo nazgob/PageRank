@@ -248,15 +248,15 @@ static char* test_full_algorithm()
     //w.elements[1][0] = 0.5;	
     //w.elements[1][1] = 0;	
 
-    printf("web matrix\n");
-    matrix_display(&w);
+    //printf("web matrix\n");
+    //matrix_display(&w);
 
     matrix g;
     matrix_init(&g, web_size);
     gen_google_matrix(&g, &w);
 
-    printf("google matrix\n");
-    matrix_display(&g);
+    //printf("google matrix\n");
+    //matrix_display(&g);
 
     vector p;
     vector_init(&p, web_size);
@@ -267,13 +267,13 @@ static char* test_full_algorithm()
 
     vector_sort(&p);
 
-    float sum = 0.0;
+    /*float sum = 0.0;
     for (size_t i = 0; i < web_size; ++i)
     {
 	printf("PageRank = %f\n", p.elements[i]);
 	sum += p.elements[i];
     }
-    printf("sum = %f\n", sum);
+    printf("sum = %f\n", sum);*/
 
     matrix_free(&w);
     matrix_free(&g);
