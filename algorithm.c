@@ -3,11 +3,16 @@
 extern size_t calculate_links(const matrix* m, size_t row)
 {
     assert(m != NULL);
+    assert(row <= m->size);
 
     size_t counter = 0;
     for (size_t i = 0; i < m->size; ++i)
     {
-	counter += m->elements[row][i]; 
+	counter += m->elements[i][row]; 
+    }
+    if(counter == 0)
+    {
+	return m->size;
     }
     assert(counter <= m->size);
 
@@ -17,9 +22,8 @@ extern size_t calculate_links(const matrix* m, size_t row)
 extern float calculate_probability(const matrix* m, size_t i, size_t j)
 {
     assert(m != NULL);
-    float p = 0.85;
+    float p = 1.0;
     size_t r = calculate_links(m, i);
-    (r == 0) ? r = 1 : r; // when page has no links...
 
     float a = (p * m->elements[i][j] / r) + ((1 - p) / m->size);
 
@@ -70,31 +74,12 @@ extern void matrix_solve(vector* v, const matrix* m)
 	tmp_vec.elements[i] = 0.0;
     }
 
-    for(size_t x = 0; x < 50; ++x)
+    for(size_t x = 0; x < 3; ++x)
     {
-	for (size_t i = 0; i < size; ++i)
-	{
-	    for (size_t j = 0; j < size; ++j)
-	    {
-		tmp_vec.elements[i] += m->elements[i][j] * v->elements[j]; 
-	    }
-	}
-
-	/*for(size_t i = 0; i < size; ++i)
-	{
-	    printf("p = %.4f ", tmp_vec.elements[i]);
-	}
-
-	printf("\n");*/
+	matrix_multiply(&tmp_vec, m, v);
 
 	vector_normalize(&tmp_vec);
 
-	/*for(size_t i = 0; i < size; ++i)
-	{
-	    printf("n = %.4f ", tmp_vec.elements[i]);
-	}
-	printf("\n");
-*/
 	for (size_t i = 0; i < size; ++i)
 	{
 	    v->elements[i] = tmp_vec.elements[i];

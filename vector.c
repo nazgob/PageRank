@@ -19,11 +19,15 @@ extern void vector_free(vector* v)
 extern void vector_normalize(vector* v)
 {
     assert(v != NULL);
-    float factor = v->elements[0];
-    v->elements[0] = 1.0;
-    for(size_t i = 1; i < v->size; ++i)
+
+    float sum = 0.0;
+    for (size_t i = 0; i < v->size; ++i)
     {
-	v->elements[i] = v->elements[i] / factor;
+	sum += v->elements[i];
+    }
+    for (size_t i = 0; i < v->size; ++i)
+    {
+	v->elements[i] /= sum;
     }
 }
 
@@ -31,5 +35,15 @@ extern void vector_sort(vector* v)
 {
     assert(v != NULL);
     qsort(v->elements, v->size, sizeof(float), float_comparator);
+}
+
+
+extern void vector_display(vector *v) 
+{
+    assert (v != NULL);
+    for (size_t i = 0; i < v->size; ++i)
+    {
+	    printf("|%.4f| \n", v->elements[i]);
+    }
 }
 

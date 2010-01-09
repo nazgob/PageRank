@@ -57,3 +57,22 @@ extern void matrix_transpose(const matrix* m)
     }
 }
 
+extern void matrix_multiply(vector* tmp, const matrix* m, vector* v)
+{
+    assert(tmp != NULL);
+    assert (m != NULL);
+    assert(v!= NULL);
+    assert(tmp->size == v->size);
+    assert(m->size == v->size);
+
+    size_t size = tmp->size;
+
+    for (size_t i = 0; i < size; ++i)
+    {
+	for (size_t j = 0; j < size; ++j)
+	{
+	    tmp->elements[i] += m->elements[i][j] * v->elements[j]; 
+	}
+    }
+}
+

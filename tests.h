@@ -85,11 +85,43 @@ static char* test_vector_normalize()
 
     vector_normalize(&v);
 
-    mu_assert("vector_normalize failed", compare_floats(v.elements[0], 1.0));
-    mu_assert("vector_normalize failed", compare_floats(v.elements[1], -0.2));
-    mu_assert("vector_normalize failed", compare_floats(v.elements[2], -0.2));
+    mu_assert("vector_normalize failed", compare_floats(v.elements[0], 1.66));
+    mu_assert("vector_normalize failed", compare_floats(v.elements[1], -0.33));
+    mu_assert("vector_normalize failed", compare_floats(v.elements[2], -0.33));
 
     vector_free(&v);
+
+    return 0;
+}
+
+static char* test_matrix_multiply()
+{
+    size_t problem_size = 2;
+    matrix g;
+
+    matrix_init(&g, problem_size);
+
+    g.elements[0][0] = 0;	
+    g.elements[0][1] = 0.5;	
+    g.elements[1][0] = 1;	
+    g.elements[1][1] = 0.5;	
+
+    vector output;
+    vector input;
+    vector_init(&output, problem_size);
+    vector_init(&input, problem_size);
+
+    input.elements[0] = 1.0;
+    input.elements[1] = 1.0;
+
+    matrix_multiply(&output, &g, &input);
+
+    mu_assert("matrix multiply failed", compare_floats(output.elements[0], 0.5 ));
+    mu_assert("matrix multiply failed", compare_floats(output.elements[1], 1.5 ));
+
+    matrix_free(&g);
+    vector_free(&output);
+    vector_free(&input);
 
     return 0;
 }
@@ -139,9 +171,9 @@ static char* test_matrix_solve()
     vector_init(&v, problem_size);
     matrix_solve(&v, &problem);
 
-    mu_assert("matrix_solve failed", compare_floats(v.elements[0], 1.0));
-    mu_assert("matrix_solve failed", compare_floats(v.elements[1], -0.44));
-    mu_assert("matrix_solve failed", compare_floats(v.elements[2], -0.44));
+    mu_assert("matrix_solve failed", compare_floats(v.elements[0], 9.66));
+    mu_assert("matrix_solve failed", compare_floats(v.elements[1], -4.33));
+    mu_assert("matrix_solve failed", compare_floats(v.elements[2], -4.33));
 
     matrix_free(&problem);
     vector_free(&v);
@@ -151,24 +183,18 @@ static char* test_matrix_solve()
 
 static char* test_calculate_links()
 {
-    size_t problem_size = 3;
+    size_t problem_size = 2;
     matrix problem;
 
     matrix_init(&problem, problem_size);
 
     problem.elements[0][0] = 0;
     problem.elements[0][1] = 0;
-    problem.elements[0][2] = 0;
-    problem.elements[1][0] = 1.0;
+    problem.elements[1][0] = 1;
     problem.elements[1][1] = 0;
-    problem.elements[1][2] = 0.0;
-    problem.elements[2][0] = 1.0;
-    problem.elements[2][1] = 0;
-    problem.elements[2][2] = 1.0;
 
-    mu_assert("calculate_link failed", calculate_links(&problem, 0) == 0);
-    mu_assert("caclulate_link failed", calculate_links(&problem, 1) == 1);
-    mu_assert("calculate_link failed", calculate_links(&problem, 2) == 2);
+    mu_assert("calculate_link failed", calculate_links(&problem, 0) == 1);
+    mu_assert("caclulate_link failed", calculate_links(&problem, 1) == 2);
 
     matrix_free(&problem);
 
@@ -192,17 +218,17 @@ static char* test_calculate_probability()
     problem.elements[2][1] = 0;
     problem.elements[2][2] = 1.0;
 
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 0), 0.05));
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 1), 0.05));
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 2), 0.05));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 0), 0));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 1), 0));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 0, 2), 0));
 
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 0), 0.90));
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 1), 0.05));
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 2), 0.05));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 0), 0.33));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 1), 0));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 1, 2), 0));
 
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 0), 0.475));
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 1), 0.05));
-    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 2), 0.475));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 0), 1));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 1), 0));
+    mu_assert("calculate_probability failed", compare_floats(calculate_probability(&problem, 2, 2), 1));
 
     matrix_free(&problem);
 
@@ -217,14 +243,26 @@ static char* test_full_algorithm()
     matrix_init(&w, web_size);
     gen_web_matrix(&w); // random generated links matrix
 
+    //w.elements[0][0] = 0.5;	
+    //w.elements[0][1] = 1;	
+    //w.elements[1][0] = 0.5;	
+    //w.elements[1][1] = 0;	
+
+    printf("web matrix\n");
+    matrix_display(&w);
+
     matrix g;
     matrix_init(&g, web_size);
     gen_google_matrix(&g, &w);
+
+    printf("google matrix\n");
+    matrix_display(&g);
 
     vector p;
     vector_init(&p, web_size);
 
     matrix_transpose(&g);
+
     matrix_solve(&p, &g);
 
     vector_sort(&p);

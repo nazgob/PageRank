@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include <utils.h>
 
@@ -18,6 +19,8 @@ extern void vector_free(vector* v);
 extern void vector_normalize(vector* v);
 
 extern void vector_sort(vector* v);
+
+extern void vector_display(vector *v);
 
 #endif // VECTOR_H
 
