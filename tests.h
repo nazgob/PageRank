@@ -207,8 +207,7 @@ static char* test_gen_web_matrix()
     matrix w;
     matrix_init(&w, size);
     gen_web_matrix(&w); // random generated links matrix
-    matrix_display(&w);
-
+    //TODO: add some smart asserts
     return 0;
 }
 

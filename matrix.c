@@ -3,7 +3,7 @@
 extern void matrix_init(matrix* m, size_t size)
 {
     m->size = size;
-    m->elements = (float**)malloc(sizeof(float) * size);
+    m->elements = (float**)malloc(sizeof(float*) * size);
 
     assert(m->elements != NULL);
 
