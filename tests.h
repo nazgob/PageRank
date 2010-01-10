@@ -201,6 +201,17 @@ static char* test_calculate_links()
     return 0;
 }
 
+static char* test_gen_web_matrix()
+{
+    size_t size = 10;
+    matrix w;
+    matrix_init(&w, size);
+    gen_web_matrix(&w); // random generated links matrix
+    matrix_display(&w);
+
+    return 0;
+}
+
 static char* test_calculate_probability()
 {
     size_t problem_size = 3;

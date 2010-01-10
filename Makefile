@@ -16,7 +16,6 @@ FLAGS = -I . $(W_FLAGS)
 main: $(OBJS)
 	@echo "Building $(EXEC)"
 	$(CC) $(OBJS) $(FLAGS) -o $(EXEC)
-	ctags -R .
 
 tags:
 	ctags -R .
