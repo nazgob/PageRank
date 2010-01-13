@@ -99,6 +99,8 @@ extern void page_rank(size_t size)
     matrix_init(&g, size);
     gen_google_matrix(&g, &w);
 
+    matrix_free(&w);
+    
     vector p;
     vector_init(&p, size);
 
@@ -110,15 +112,6 @@ extern void page_rank(size_t size)
 
     vector_save(&p);
 
-    float sum = 0.0;
-    for (size_t i = 0; i < size; ++i)
-    {
-	//printf("PageRank = %f\n", p.elements[i]);
-	sum += p.elements[i];
-    }
-    //printf("sum = %f\n", sum);
-
-    matrix_free(&w);
     matrix_free(&g);
     vector_free(&p);
 }
