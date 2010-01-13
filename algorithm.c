@@ -73,6 +73,7 @@ extern void matrix_solve(vector* v, const matrix* m)
 	v->elements[i] = 1.0;
 	tmp_vec.elements[i] = 0.0;
     }
+    //memset(tmp_vec.elements, 0, sizeof(float) * size); 
 
     for(size_t x = 0; x < 3; ++x)
     {
@@ -85,6 +86,7 @@ extern void matrix_solve(vector* v, const matrix* m)
 	    v->elements[i] = tmp_vec.elements[i];
 	    tmp_vec.elements[i] = 0.0;
 	}
+	//memset(tmp_vec.elements, 0, sizeof(float) * size); 
     }
     vector_free(&tmp_vec);
 }
