@@ -4,7 +4,7 @@ OBJS = main.o \
        algorithm.o \
        utils.o
 
-CC = gcc -std=c99 -O3
+CC = gcc -std=c99 -O3 -fopenmp
 EXEC = prr
 W_FLAGS = -Wall -Wextra -pedantic
 
@@ -22,5 +22,5 @@ tags:
 		
 clean:
 	@echo "Cleaning all!"
-	\rm -rf tags *.o *.out *.~ $(EXEC)
+	\rm -rf tags *.o *.out *.txt *.~ $(EXEC)
 
