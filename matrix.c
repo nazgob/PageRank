@@ -67,11 +67,9 @@ extern void matrix_multiply(vector* tmp, const matrix* m, vector* v)
 
 	size_t size = tmp->size;
 
-	size_t i, j;
-	#pragma omp parallel for default(none) shared(tmp, m, v, size) private(i, j)
-	for (i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 	{
-		for (j = 0; j < size; ++j)
+		for (size_t j = 0; j < size; ++j)
 		{
 			tmp->elements[i] += m->elements[i][j] * v->elements[j]; 
 		}
