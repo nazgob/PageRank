@@ -48,18 +48,58 @@ extern void gen_google_matrix(matrix* a, matrix* m)
 	assert(m != 0);
 	assert(a->size == m->size);
 
-	size_t i = 0;
-	size_t j = 0;
 	size_t size = a->size;
 
-	#pragma omp parallel for default(none) shared(a, m, size) private(i, j)
-	for (i = 0; i < size; ++i)
+	int id = 0;
+	int n_threads = 0;
+	int tag = 1234;
+
+	MPI_Comm_rank(MPI_COMM_WORLD, &id);
+	MPI_Comm_size(MPI_COMM_WORLD, &n_threads);
+	MPI_Status status;
+
+	size_t slice = size / n_threads;
+	assert (size % n_threads == 0);
+
+	vector tmp;
+	vector_init(&tmp, size);
+
+	for (size_t i = 0; i < size; ++i)
 	{
-		for(j = 0; j < size; ++j)
+		for(size_t j = slice * id; j< slice * id + slice; ++j)
 		{
-			a->elements[i][j] = calculate_probability(m, i, j);
+			tmp.elements[j] = calculate_probability(m, i, j);
+		}
+
+		if (id != 0)
+		{
+			int dest = 0;
+			MPI_Send(&tmp.elements[slice * id], slice, MPI_FLOAT, dest, tag, MPI_COMM_WORLD);
+		}
+		else
+		{
+			for (int source = 1; source < n_threads; ++source)
+			{
+				const size_t max_msg_size = 10000;
+				float msg[max_msg_size];
+				int res = MPI_Recv(&msg, slice, MPI_FLOAT, source, tag, MPI_COMM_WORLD, &status);
+				assert(res == 0);
+
+				for(size_t k = 0; k < slice; ++k)
+				{
+					a->elements[i][slice * source + k] = msg[k];
+				}
+				
+				for(size_t k = 0; k < slice; ++k)
+				{
+					a->elements[i][k] = tmp.elements[k];
+				}
+
+			}
 		}
 	}
+	
+	vector_free(&tmp);
 }
 
 extern void matrix_solve(vector* v, const matrix* m)
@@ -106,18 +146,24 @@ extern void page_rank(size_t size)
 
 	matrix_free(&w);
 
-	vector p;
-	vector_init(&p, size);
+	int id = 0;
 
-	matrix_transpose(&g);
+	MPI_Comm_rank(MPI_COMM_WORLD, &id);
 
-	matrix_solve(&p, &g);
+	if(id == 0)
+	{
+		vector p;
+		vector_init(&p, size);
 
-	vector_sort(&p);
+		matrix_transpose(&g);
 
-	vector_save(&p);
+		matrix_solve(&p, &g);
 
+		vector_sort(&p);
+
+		vector_save(&p);
+		vector_free(&p);
+	}
 	matrix_free(&g);
-	vector_free(&p);
 }
 

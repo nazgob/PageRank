@@ -4,6 +4,7 @@
 #include <matrix.h>
 #include <vector.h>
 #include <math.h>
+#include <mpi.h>
 
 extern size_t calculate_links(const matrix* m, size_t row);
 

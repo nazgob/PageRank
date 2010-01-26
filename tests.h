@@ -277,13 +277,13 @@ static char* test_full_algorithm()
 
     vector_sort(&p);
 
-    /*float sum = 0.0;
+    float sum = 0.0;
     for (size_t i = 0; i < web_size; ++i)
     {
 	printf("PageRank = %f\n", p.elements[i]);
 	sum += p.elements[i];
     }
-    printf("sum = %f\n", sum);*/
+    printf("sum = %f\n", sum);
 
     matrix_free(&w);
     matrix_free(&g);
