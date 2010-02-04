@@ -1,5 +1,4 @@
 #include <algorithm.h>
-#include <pthread.h>
 
 extern size_t calculate_links(const matrix* m, size_t row)
 {

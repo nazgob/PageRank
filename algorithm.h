@@ -4,7 +4,7 @@
 #include <matrix.h>
 #include <vector.h>
 #include <math.h>
-#include <mpi.h>
+#include <pthread.h>
 
 typedef struct parallel_info
 {
