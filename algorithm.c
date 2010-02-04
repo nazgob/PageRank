@@ -10,6 +10,7 @@ extern size_t calculate_links(const matrix* m, size_t row)
 	{
 		counter += m->elements[i][row]; 
 	}
+
 	if(counter == 0)
 	{
 		return m->size;
@@ -94,7 +95,7 @@ extern void gen_google_matrix(matrix* a, matrix* m)
 		assert(ret == 0);
 	}
 
-	int status;
+	int status = 0;
 	for(size_t x = 0; x < n_threads; ++x)
 	{
 		int ret = pthread_join(callThd[x], (void**)&status);
