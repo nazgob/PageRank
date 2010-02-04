@@ -6,11 +6,22 @@
 #include <math.h>
 #include <mpi.h>
 
+typedef struct parallel_info
+{
+	size_t id;
+	size_t n_threads;
+	size_t size;
+	matrix* in;
+	matrix* out;
+} parallel_info;
+
 extern size_t calculate_links(const matrix* m, size_t row);
 
 extern float calculate_probability(const matrix* m, size_t i, size_t j);
 
 extern void gen_web_matrix(const matrix* m);
+
+extern void* parallel_calculate(void* _parallel_info);
 
 extern void gen_google_matrix(matrix* a, matrix* m);
 

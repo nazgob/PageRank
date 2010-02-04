@@ -31,16 +31,6 @@ static char* all_tests()
 
 int main(int argc, char** argv)
 {
-	MPI_Init(&argc, &argv);
-
-	//g_argc = argc;
-	//g_argv = (char**)malloc(sizeof(char*) * argc);
-	///for(int i = 0; i < argc; ++i)
-	//{
-	//	g_argv[i] = (char*)malloc(sizeof(char) * (strlen(argv[i] + 1)));
-	//	strncpy(g_argv[i], argv[i], sizeof(g_argv[i]) + 1);
-	//}
-	//
 	if(argc != 2)
 	{
 		printf("Podaj jako jedyny argument rozmiar grafu.\n");
@@ -53,27 +43,21 @@ int main(int argc, char** argv)
 	srand(time(0));
 
 	/*char* result = all_tests();
-	  if (result != 0)
-	  {
-	  printf("%s\n", result);
-	  }
-	  else
-	  {
-	  printf("ALL TESTS PASSED\n");
-	  }
-	  printf("Tests run: %d\n", tests_run);*/
-
-
-	int id = 0;
-	MPI_Comm_rank(MPI_COMM_WORLD, &id);
-	if(id == 0)
+	if (result != 0)
 	{
-		printf("Trwa obliczanie...\n");
+		printf("%s\n", result);
 	}
+	else
+	{
+		printf("ALL TESTS PASSED\n");
+	}
+	printf("Tests run: %d\n", tests_run);*/
+
+
+	printf("Trwa obliczanie...\n");
 
 	page_rank(web_size);
 
-	MPI_Finalize();
 	return 0;
 }
 

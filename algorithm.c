@@ -1,4 +1,5 @@
 #include <algorithm.h>
+#include <pthread.h>
 
 extern size_t calculate_links(const matrix* m, size_t row)
 {
@@ -42,64 +43,65 @@ extern void gen_web_matrix(const matrix* m)
 	}
 }
 
+extern void* parallel_calculate(void* _parallel_info)
+{
+	assert(_parallel_info != NULL);
+
+	parallel_info* info = (parallel_info*)_parallel_info;
+
+	assert(info->in != NULL);
+	assert(info->out != NULL);
+
+	size_t n_threads = info->n_threads;
+
+	size_t id = info->id;
+	size_t size = info->size;
+	size_t slice = size / n_threads;
+
+	assert(size % n_threads == 0);
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		for(size_t j = slice * id; j < slice * id + slice; ++j)
+		{
+			info->out->elements[i][j] = calculate_probability(info->in, i, j);
+		}
+	}
+
+	free(_parallel_info); //_parallel_info has been alocated in gen_google_matrix
+
+	return NULL;
+}
+
 extern void gen_google_matrix(matrix* a, matrix* m)
 {
 	assert(a != 0);
 	assert(m != 0);
 	assert(a->size == m->size);
 
-	size_t size = a->size;
+	const size_t n_threads = 5;
+	pthread_t callThd[n_threads];
 
-	int id = 0;
-	int n_threads = 0;
-	int tag = 1234;
-
-	MPI_Comm_rank(MPI_COMM_WORLD, &id);
-	MPI_Comm_size(MPI_COMM_WORLD, &n_threads);
-	MPI_Status status;
-
-	size_t slice = size / n_threads;
-	assert (size % n_threads == 0);
-
-	vector tmp;
-	vector_init(&tmp, size);
-
-	for (size_t i = 0; i < size; ++i)
+	for(size_t x = 0; x < n_threads; ++x)
 	{
-		for(size_t j = slice * id; j< slice * id + slice; ++j)
-		{
-			tmp.elements[j] = calculate_probability(m, i, j);
-		}
+		parallel_info* info = (parallel_info*)malloc(sizeof(parallel_info));
+		info->n_threads = n_threads;
+		info->size = a->size;
+		info->in = m;
+		info->out = a;
+		info->id = x;
 
-		if (id != 0)
-		{
-			int dest = 0;
-			MPI_Send(&tmp.elements[slice * id], slice, MPI_FLOAT, dest, tag, MPI_COMM_WORLD);
-		}
-		else
-		{
-			for (int source = 1; source < n_threads; ++source)
-			{
-				const size_t max_msg_size = 10000;
-				float msg[max_msg_size];
-				int res = MPI_Recv(&msg, slice, MPI_FLOAT, source, tag, MPI_COMM_WORLD, &status);
-				assert(res == 0);
-
-				for(size_t k = 0; k < slice; ++k)
-				{
-					a->elements[i][slice * source + k] = msg[k];
-				}
-				
-				for(size_t k = 0; k < slice; ++k)
-				{
-					a->elements[i][k] = tmp.elements[k];
-				}
-
-			}
-		}
+		int ret = pthread_create(&callThd[x], NULL, parallel_calculate, (void*)info);
+		assert(ret == 0);
 	}
-	
-	vector_free(&tmp);
+
+	int status;
+	for(size_t x = 0; x < n_threads; ++x)
+	{
+		int ret = pthread_join(callThd[x], (void**)&status);
+		assert(ret == 0);
+		assert(status == 0);
+	}
 }
 
 extern void matrix_solve(vector* v, const matrix* m)
@@ -146,24 +148,18 @@ extern void page_rank(size_t size)
 
 	matrix_free(&w);
 
-	int id = 0;
+	vector p;
+	vector_init(&p, size);
 
-	MPI_Comm_rank(MPI_COMM_WORLD, &id);
+	matrix_transpose(&g);
 
-	if(id == 0)
-	{
-		vector p;
-		vector_init(&p, size);
+	matrix_solve(&p, &g);
 
-		matrix_transpose(&g);
+	vector_sort(&p);
 
-		matrix_solve(&p, &g);
+	vector_save(&p);
+	vector_free(&p);
 
-		vector_sort(&p);
-
-		vector_save(&p);
-		vector_free(&p);
-	}
 	matrix_free(&g);
 }
 

@@ -4,7 +4,7 @@ OBJS = main.o \
        algorithm.o \
        utils.o
 
-CC = mpicc -std=c99 -O3
+CC = gcc -std=c99 -O3 -pthread
 EXEC = prr
 W_FLAGS = -Wall -Wextra -pedantic
 
