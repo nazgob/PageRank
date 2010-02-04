@@ -58,7 +58,7 @@ extern void* parallel_calculate(void* _parallel_info)
 	size_t size = info->size;
 	size_t slice = size / n_threads;
 
-	assert(size % n_threads == 0);
+	//assert(size % n_threads == 0);
 
 	for (size_t i = 0; i < size; ++i)
 	{
@@ -73,14 +73,16 @@ extern void* parallel_calculate(void* _parallel_info)
 	return NULL;
 }
 
+extern size_t g_n_threads;
 extern void gen_google_matrix(matrix* a, matrix* m)
 {
 	assert(a != 0);
 	assert(m != 0);
 	assert(a->size == m->size);
 
-	const size_t n_threads = 5;
-	pthread_t callThd[n_threads];
+	size_t n_threads = g_n_threads;
+
+	pthread_t* callThd = (pthread_t*)malloc(sizeof(pthread_t) * n_threads);
 
 	for(size_t x = 0; x < n_threads; ++x)
 	{
@@ -102,6 +104,8 @@ extern void gen_google_matrix(matrix* a, matrix* m)
 		assert(ret == 0);
 		assert(status == 0);
 	}
+
+	free(callThd);
 }
 
 extern void matrix_solve(vector* v, const matrix* m)

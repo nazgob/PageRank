@@ -29,29 +29,37 @@ static char* all_tests()
 	return 0;
 }
 
+size_t g_n_threads;
+
 int main(int argc, char** argv)
 {
-	if(argc != 2)
+	if(argc != 3)
 	{
-		printf("Podaj jako jedyny argument rozmiar grafu.\n");
+		printf("Podaj jako pierwszy argument rozmiar grafu, jako drugi, liczbe watkow.\n");
 		return 1;
 	}
 
-	size_t web_size = atof(argv[1]);
+	size_t web_size = atoi(argv[1]);
 	assert(web_size < 10000);
+	size_t n_threads = atoi(argv[2]);
+	assert(n_threads > 0);
 
+	g_n_threads = n_threads;
+
+	assert(web_size % n_threads == 0);
+	
 	srand(time(0));
 
-	/*char* result = all_tests();
-	  if (result != 0)
-	  {
-	  printf("%s\n", result);
-	  }
-	  else
-	  {
-	  printf("ALL TESTS PASSED\n");
-	  }
-	  printf("Tests run: %d\n", tests_run);*/
+	char* result = all_tests();
+	if (result != 0)
+	{
+		printf("%s\n", result);
+	}
+	else
+	{
+		printf("ALL TESTS PASSED\n");
+	}
+	printf("Tests run: %d\n", tests_run);
 
 
 	printf("Trwa obliczanie...\n");

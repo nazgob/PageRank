@@ -15,7 +15,6 @@ typedef struct parallel_info
 	matrix* out;
 } parallel_info;
 
-
 extern size_t calculate_links(const matrix* m, size_t row);
 
 extern float calculate_probability(const matrix* m, size_t i, size_t j);
