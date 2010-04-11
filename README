@@ -1,1 +1,2 @@
-PRR project in ANSI C. Readme will be updated when project is finished.
+Simple Google PageRank algorithm implementation on artifical data written in good old C. There are 3 branches of this project, each devoted to different parallelization technique.
+There is openMP, openMPI and Pthreads. I did this for fun, to take a closer look at PageRank and how to parallelize it. Enjoy.
